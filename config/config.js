@@ -1,12 +1,12 @@
 import pg from "pg";
-const { Pool, Client } = pg;
+const { Pool } = pg;
 
 const pool = new Pool({
   user: "postgres",
   password: "postgres",
   host: "localhost",
-  port: 54632,
-  database: "mydb",
+  port: 5432,
+  database: "Nutech_Test_DB",
 });
 
-module.exports = pool;
+export default pool;

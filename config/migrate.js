@@ -1,5 +1,4 @@
-const pool = require("./config");
-const fs = require("fs").promises;
+import pool from "./config.js";
 
 console.log("=====Migrate=====");
 
@@ -17,15 +16,16 @@ const migrate = async () => {
 
     let createUsersTable = `
         CREATE TABLE "Users" (
-            id SERIAL PRIMARY KEY,
-            email VARCHAR,
-            first_name VARCHAR,
-            last_name VARCHAR,
-            password VARCHAR
+            id SERIAL PRIMARY KEY NOT NULL,
+            email VARCHAR NOT NULL,
+            first_name VARCHAR NOT NULL,
+            last_name VARCHAR NOT NULL,
+            password VARCHAR NOT NULL,
+            profile_image varchar NOT NULL
         )
     `;
 
-    let { rows: userTable } = await pool.query();
+    let { rows: userTable } = await pool.query(createUsersTable);
 
     let createRecordsTable = `
         CREATE TABLE "Transaction_History" (
