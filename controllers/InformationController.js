@@ -2,7 +2,7 @@ import InformationModel from "../models/InformationModel.js";
 import { decodeToken } from "../utils/jwt.js";
 
 class InformationController {
-  static async showAllBanner() {
+  static async showAllBanner(req, res, next) {
     try {
       const banner = await InformationModel.getAllBanner();
 
@@ -16,7 +16,7 @@ class InformationController {
     }
   }
 
-  static async showServices() {
+  static async showServices(req, res, next) {
     try {
       const authHeader = req.headers.authorization;
 
@@ -25,7 +25,7 @@ class InformationController {
         const payload = decodeToken(bearerToken);
         const email = payload.email;
 
-        const services = await InformationModel.services();
+        const services = await InformationModel.getAllServices();
 
         console.log(services);
         res.status(200).json({
@@ -46,6 +46,7 @@ class InformationController {
           data: null,
         });
       }
+      next(error);
     }
   }
 }
