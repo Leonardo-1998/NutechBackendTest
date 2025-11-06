@@ -7,18 +7,21 @@ class UserController {
     try {
       let { email, first_name, last_name, password } = req.body;
 
+      // Cek jika ada field kosong
       if (!email || !first_name || !last_name || !password) {
         const err = new Error("Field tidak boleh ada kosong!");
         err.status = 400;
         throw err;
       }
 
+      // Cek validasi format email
       if (!validator.isEmail(email)) {
         const err = new Error("Paramter email tidak sesuai format!");
         err.status = 400;
         throw err;
       }
 
+      // Cek panjang password apakah lebih dari 8
       if (password.length < 8) {
         const err = new Error("Password Length minimal 8 karakter!");
         err.status = 400;
@@ -33,6 +36,7 @@ class UserController {
         data: null,
       });
     } catch (error) {
+      // Jika terjadi gagal validasi
       if (error.status === 400) {
         return res.status(400).json({
           status: 102,
@@ -41,6 +45,25 @@ class UserController {
         });
       }
 
+      next(error);
+    }
+  }
+
+  // Login
+  static async loginUser(req, res, next) {
+    try {
+      const { email, password } = req.body;
+
+      const tokenJWT = await arguments;
+
+      res.status(200).json({
+        status: 0,
+        message: "Login Sukses",
+        data: {
+          token: tokenJWT,
+        },
+      });
+    } catch (error) {
       next(error);
     }
   }
@@ -54,15 +77,6 @@ class UserController {
         statusCode: 200,
         message: userProfile,
       });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  //   Get One Profile
-  static async showProfile1(req, res, next) {
-    try {
-      const userProfile = await UserModel.getOneProfile(email);
     } catch (error) {
       next(error);
     }

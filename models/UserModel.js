@@ -1,17 +1,45 @@
 import pool from "../config/config.js";
 import User from "../class/UserClass.js";
+import { hash, compare } from "../utils/bcrypt.js";
+import { token } from "../utils/jwt.js";
 
 class UserModel {
   static async createNewUser(email, first_name, last_name, password) {
     try {
-      let profileQuery = `
+      const profileQuery = `
             INSERT INTO users (email, first_name , last_name, password) 
             VALUES ($1, $2, $3, $4);
         `;
 
-      let values = [email, first_name, last_name, password];
+      const hashedPassword = await hash(password);
+
+      const values = [email, first_name, last_name, hashedPassword];
 
       await pool.query(profileQuery, values);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async checkMembership(email, password) {
+    try {
+      const queryByEmail = `
+        SELECT password
+        FROM users u
+        WHERE u.email = $1
+      `;
+
+      const values = [email];
+
+      let { rows: userPassword } = await pool.query(queryByEmail, values);
+
+      if (compare(password, userPassword)) {
+        const payload = email;
+      } else {
+        const err = new Error("Invalid Password or Email");
+        err.status = 400;
+        throw err;
+      }
     } catch (error) {
       throw error;
     }
