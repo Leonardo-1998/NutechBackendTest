@@ -1,5 +1,6 @@
 import express from "express";
 import UserController from "./controllers/UserController.js";
+import InformationController from "./controllers/InformationController.js";
 import { upload } from "./utils/multer.js";
 import multer from "multer";
 
@@ -25,8 +26,8 @@ app.put(
 );
 
 // Module Information
-app.get("/banner", UserController.X);
-app.get("/services", UserController.X);
+app.get("/banner", InformationController.showAllBanner);
+app.get("/services", InformationController.X);
 
 // Module Transaction
 app.get("/balance", UserController.X);

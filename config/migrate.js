@@ -4,18 +4,29 @@ console.log("=====Migrate=====");
 
 const migrate = async () => {
   try {
-    let queryDropTable = `
-        DROP TABLE IF EXISTS "Users", "Records"
+    let queryDropTableUser = `
+      DROP TABLE IF EXISTS users CASCADE;;
+    `;
+    let queryDropTableTransaction = `
+      DROP TABLE IF EXISTS records CASCADE;
     `;
 
-    let { rows: dropTable } = await pool.query(queryDropTable);
+    let { rows: dropUser } = await pool.query(queryDropTableUser);
+    // let { rows: dropBanner } = await pool.query(queryDropTableBanner);
+    let { rows: dropTransaction } = await pool.query(queryDropTableTransaction);
 
-    if (dropTable) {
-      console.log("Successfuly drop table");
+    if (dropUser) {
+      console.log("Successfuly drop table User");
+    }
+    // if (dropBanner) {
+    //   console.log("Successfuly drop table Banner");
+    // }
+    if (dropTransaction) {
+      console.log("Successfuly drop table TransactionHistory");
     }
 
     let createUsersTable = `
-        CREATE TABLE "Users" (
+        CREATE TABLE users (
             id SERIAL PRIMARY KEY NOT NULL,
             email VARCHAR NOT NULL,
             first_name VARCHAR NOT NULL,
@@ -27,8 +38,31 @@ const migrate = async () => {
 
     let { rows: userTable } = await pool.query(createUsersTable);
 
+    if (userTable) {
+      console.log("===== Success =====");
+      console.log("Create User Table");
+      console.log("===== ------- =====");
+    }
+
+    // let createBannerTable = `
+    //     CREATE TABLE "Banners" (
+    //         id SERIAL PRIMARY KEY NOT NULL,
+    //         banner_name VARCHAR NOT NULL,
+    //         banner_image VARCHAR NOT NULL,
+    //         description VARCHAR NOT NULL
+    //     )
+    // `;
+
+    // let { rows: bannerTable } = await pool.query(createBannerTable);
+
+    // if (bannerTable) {
+    //   console.log("===== Success =====");
+    //   console.log("Create Banner Table");
+    //   console.log("===== ------- =====");
+    // }
+
     let createRecordsTable = `
-        CREATE TABLE "Transaction_History" (
+        CREATE TABLE records (
             id SERIAL PRIMARY KEY,
             invoice_number VARCHAR,
             service_code VARCHAR,
@@ -39,6 +73,14 @@ const migrate = async () => {
             created_on DATE
         )
     `;
+
+    let { rows: recordTable } = await pool.query(createRecordsTable);
+
+    if (recordTable) {
+      console.log("===== Success =====");
+      console.log("Create Transaction History Table");
+      console.log("===== ------- =====");
+    }
   } catch (error) {
     console.log("=====Error=====");
     console.log(error);

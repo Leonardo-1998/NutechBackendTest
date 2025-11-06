@@ -7,13 +7,6 @@ class UserModel {
   // Membuat user baru
   static async createNewUser(email, first_name, last_name, password) {
     try {
-      const registered = await this.membershipProfile(email);
-      if (registered) {
-        const err = new Error("Email sudah digunakan untuk registrasi!");
-        err.status = 400;
-        throw err;
-      }
-
       const profileQuery = `
             INSERT INTO users (email, first_name , last_name, password, profile_image) 
             VALUES ($1, $2, $3, $4, $5);
@@ -147,13 +140,6 @@ class UserModel {
       let profile = this.membershipProfile(email);
 
       return profile;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async X() {
-    try {
     } catch (error) {
       throw error;
     }
