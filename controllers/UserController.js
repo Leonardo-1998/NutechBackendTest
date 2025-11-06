@@ -1,5 +1,6 @@
 import UserModel from "../models/UserModel.js";
 import validator from "validator";
+import { decodeToken } from "../utils/jwt.js";
 
 class UserController {
   // Create New Membership / User
@@ -96,8 +97,44 @@ class UserController {
     }
   }
 
-  // Get All Profile
+  // Profile
   static async showProfile(req, res, next) {
+    try {
+      const authHeader = req.headers.authorization;
+
+      if (authHeader) {
+        const bearerToken = authHeader.split(" ")[1];
+        const payload = decodeToken(bearerToken);
+        const email = payload.email;
+
+        const profile = await UserModel.membershipProfile(email);
+
+        console.log(profile);
+        res.status(200).json({
+          status: 0,
+          message: "Suskes",
+          data: profile,
+        });
+      } else {
+        const err = new Error("Token tidak tidak valid atau kadaluwarsa");
+        err.status = 401;
+        throw err;
+      }
+    } catch (error) {
+      if (error.status === 401) {
+        res.status(401).json({
+          status: 108,
+          message: error.message,
+          data: null,
+        });
+      }
+
+      next(error);
+    }
+  }
+
+  // Get All Profile
+  static async showAllProfile(req, res, next) {
     try {
       const userProfile = await UserModel.getAllProfile();
 

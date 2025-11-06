@@ -8,13 +8,19 @@ class UserModel {
   static async createNewUser(email, first_name, last_name, password) {
     try {
       const profileQuery = `
-            INSERT INTO users (email, first_name , last_name, password) 
-            VALUES ($1, $2, $3, $4);
+            INSERT INTO users (email, first_name , last_name, password, profile_image) 
+            VALUES ($1, $2, $3, $4, $5);
         `;
 
       const hashedPassword = await hash(password);
 
-      const values = [email, first_name, last_name, hashedPassword];
+      const values = [
+        email,
+        first_name,
+        last_name,
+        hashedPassword,
+        "https://picsum.photos/200",
+      ];
 
       await pool.query(profileQuery, values);
     } catch (error) {
@@ -46,7 +52,7 @@ class UserModel {
       const match = await compare(password, userPassword);
 
       if (match) {
-        const tokenJWT = token(email);
+        const tokenJWT = token({ email: user[0].email });
 
         return tokenJWT;
       } else {
@@ -59,26 +65,38 @@ class UserModel {
     }
   }
 
-  static async getOneProfile(email) {
+  static async membershipProfile(email) {
     try {
       let profileQuery = `
             SELECT *
             FROM users u 
             WHERE u.email = $1
-        `;
+      `;
 
-      const { row: oneProfile } = await pool.query(profileQuery, [email]);
+      const values = [email];
 
-      oneProfile = oneProfile.map((el) => {
+      let { rows: profile } = await pool.query(profileQuery, values);
+      // console.log(profile);
+
+      profile = profile.map((el) => {
         return new User(
           el.id,
           el.email,
           el.first_name,
           el.last_name,
-          el.password
+          el.password,
+          el.profile_image
         );
       });
-      return oneProfile;
+
+      const filteredProfile = {
+        email: profile[0].email,
+        first_name: profile[0].first_name,
+        last_name: profile[0].last_name,
+        profile_image: profile[0].profile_image,
+      };
+
+      return filteredProfile;
     } catch (error) {
       throw error;
     }

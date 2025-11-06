@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 // Module Membership
 app.post("/registration", UserController.registerUser);
 app.post("/login", UserController.loginUser);
-app.get("/profile", UserController.X);
+app.get("/profile", UserController.showProfile);
 app.put("/profile/update", UserController.X);
 app.put("/profile/image", UserController.X);
 
@@ -27,7 +27,7 @@ app.post("/topup", UserController.X);
 app.post("/transaction", UserController.X);
 app.get("/transaction/history", UserController.X);
 
-app.get("/user", UserController.showProfile);
+// app.get("/user", UserController.showProfile);
 
 app.listen(port, () => {
   console.log(`Starting app at port ${port}`);
