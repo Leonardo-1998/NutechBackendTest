@@ -133,20 +133,6 @@ class UserController {
     }
   }
 
-  // Get All Profile
-  static async showAllProfile(req, res, next) {
-    try {
-      const userProfile = await UserModel.getAllProfile();
-
-      res.status(200).json({
-        statusCode: 200,
-        message: userProfile,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async X(req, res, next) {
     try {
     } catch (error) {
