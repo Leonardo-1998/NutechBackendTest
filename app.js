@@ -27,7 +27,7 @@ app.put(
 
 // Module Information
 app.get("/banner", InformationController.showAllBanner);
-app.get("/services", InformationController.X);
+app.get("/services", InformationController.showServices);
 
 // Module Transaction
 app.get("/balance", UserController.X);

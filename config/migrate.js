@@ -61,6 +61,25 @@ const migrate = async () => {
     //   console.log("===== ------- =====");
     // }
 
+    // let createServiceTable = `
+    //     CREATE TABLE public.services (
+    //   id serial NOT NULL,
+    //   service_code varchar NULL,
+    //   service_name varchar NULL,
+    //   service_icon varchar NULL,
+    //   service_tariff varchar NULL,
+    //   CONSTRAINT services_pk PRIMARY KEY (id)
+    // );
+    // `;
+
+    // let { rows: servicesTable } = await pool.query(createServiceTable);
+
+    // if (bannerTable) {
+    //   console.log("===== Success =====");
+    //   console.log("Create Banner Table");
+    //   console.log("===== ------- =====");
+    // }
+
     let createRecordsTable = `
         CREATE TABLE records (
             id SERIAL PRIMARY KEY,
