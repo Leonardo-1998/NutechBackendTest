@@ -10,15 +10,18 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/registration", UserController.X);
+// Module Membership
+app.post("/registration", UserController.registerUser);
 app.post("/login", UserController.X);
 app.get("/profile", UserController.X);
 app.put("/profile/update", UserController.X);
 app.put("/profile/image", UserController.X);
 
+// Module Information
 app.get("/banner", UserController.X);
 app.get("/services", UserController.X);
 
+// Module Transaction
 app.get("/balance", UserController.X);
 app.post("/topup", UserController.X);
 app.post("/transaction", UserController.X);

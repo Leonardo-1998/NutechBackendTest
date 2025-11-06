@@ -2,6 +2,21 @@ import pool from "../config/config.js";
 import User from "../class/UserClass.js";
 
 class UserModel {
+  static async createNewUser(email, first_name, last_name, password) {
+    try {
+      let profileQuery = `
+            INSERT INTO users (email, first_name , last_name, password) 
+            VALUES ($1, $2, $3, $4);
+        `;
+
+      let values = [email, first_name, last_name, password];
+
+      await pool.query(profileQuery, values);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async getAllProfile() {
     try {
       let profileQuery = `
