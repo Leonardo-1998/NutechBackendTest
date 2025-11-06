@@ -4,6 +4,7 @@ import { hash, compare } from "../utils/bcrypt.js";
 import { token } from "../utils/jwt.js";
 
 class UserModel {
+  // Membuat user baru
   static async createNewUser(email, first_name, last_name, password) {
     try {
       const profileQuery = `
@@ -21,25 +22,63 @@ class UserModel {
     }
   }
 
+  // Cek password dengan email
   static async checkMembership(email, password) {
     try {
       const queryByEmail = `
-        SELECT password
+        SELECT *
         FROM users u
         WHERE u.email = $1
       `;
 
       const values = [email];
 
-      let { rows: userPassword } = await pool.query(queryByEmail, values);
+      let { rows: user } = await pool.query(queryByEmail, values);
 
-      if (compare(password, userPassword)) {
-        const payload = email;
-      } else {
-        const err = new Error("Invalid Password or Email");
-        err.status = 400;
+      if (user.length === 0) {
+        const err = new Error("Email atau password salah!");
+        err.status = 401;
         throw err;
       }
+
+      const userPassword = user[0].password;
+
+      const match = await compare(password, userPassword);
+
+      if (match) {
+        const tokenJWT = token(email);
+
+        return tokenJWT;
+      } else {
+        const err = new Error("Email atau password salah!");
+        err.status = 401;
+        throw err;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getOneProfile(email) {
+    try {
+      let profileQuery = `
+            SELECT *
+            FROM users u 
+            WHERE u.email = $1
+        `;
+
+      const { row: oneProfile } = await pool.query(profileQuery, [email]);
+
+      oneProfile = oneProfile.map((el) => {
+        return new User(
+          el.id,
+          el.email,
+          el.first_name,
+          el.last_name,
+          el.password
+        );
+      });
+      return oneProfile;
     } catch (error) {
       throw error;
     }
@@ -65,30 +104,6 @@ class UserModel {
       });
 
       return allProfile;
-    } catch (error) {
-      throw error;
-    }
-  }
-  static async getOneProfile(email) {
-    try {
-      let profileQuery = `
-            SELECT *
-            FROM users u 
-            WHERE u.email = $1
-        `;
-
-      const { row: oneProfile } = await pool.query(profileQuery, [email]);
-
-      oneProfile = oneProfile.map((el) => {
-        return new User(
-          el.id,
-          el.email,
-          el.first_name,
-          el.last_name,
-          el.password
-        );
-      });
-      return oneProfile;
     } catch (error) {
       throw error;
     }

@@ -54,7 +54,21 @@ class UserController {
     try {
       const { email, password } = req.body;
 
-      const tokenJWT = await arguments;
+      // Validasi ada input email dan password
+      if (!email || !password) {
+        const err = new Error("Email atau password salah!");
+        err.status = 401;
+        throw err;
+      }
+
+      // Mengecek apakah benar format email
+      if (!validator.isEmail(email)) {
+        const err = new Error("Paramter email tidak sesuai format!");
+        err.status = 400;
+        throw err;
+      }
+
+      const tokenJWT = await UserModel.checkMembership(email, password);
 
       res.status(200).json({
         status: 0,
@@ -64,6 +78,20 @@ class UserController {
         },
       });
     } catch (error) {
+      if (error.status === 400) {
+        return res.status(400).json({
+          status: 102,
+          message: error.message,
+          data: null,
+        });
+      }
+      if (error.status === 401) {
+        return res.status(401).json({
+          status: 103,
+          message: error.message,
+          data: null,
+        });
+      }
       next(error);
     }
   }
