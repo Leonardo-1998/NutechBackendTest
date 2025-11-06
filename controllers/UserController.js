@@ -55,7 +55,7 @@ class UserController {
       const { email, password } = req.body;
 
       // Validasi ada input email dan password
-      if (!email || !password) {
+      if (!email || !password || password.length < 8) {
         const err = new Error("Email atau password salah!");
         err.status = 401;
         throw err;
