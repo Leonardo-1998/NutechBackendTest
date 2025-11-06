@@ -122,7 +122,7 @@ class UserController {
       }
     } catch (error) {
       if (error.status === 401) {
-        res.status(401).json({
+        return res.status(401).json({
           status: 108,
           message: error.message,
           data: null,
@@ -133,12 +133,112 @@ class UserController {
     }
   }
 
-  static async X(req, res, next) {
+  // Update Profile
+  static async updateProfile(req, res, next) {
     try {
+      const authHeader = req.headers.authorization;
+
+      if (authHeader) {
+        const bearerToken = authHeader.split(" ")[1];
+        const payload = decodeToken(bearerToken);
+        const email = payload.email;
+
+        const { first_name, last_name } = req.body;
+
+        if (!first_name || !last_name) {
+          const err = new Error("Invalid input!");
+          err.status = 400;
+          throw err;
+        }
+
+        const updateProfile = await UserModel.updateProfile(
+          email,
+          first_name,
+          last_name
+        );
+
+        res.status(200).json({
+          status: 0,
+          message: "Update Pofile berhasil",
+          data: updateProfile,
+        });
+      } else {
+        const err = new Error("Token tidak tidak valid atau kadaluwarsa");
+        err.status = 401;
+        throw err;
+      }
     } catch (error) {
+      if (error.status === 401) {
+        return res.status(401).json({
+          status: 108,
+          message: error.message,
+          data: null,
+        });
+      } else if (error.status === 400) {
+        return res.status(400).json({
+          status: 108,
+          message: error.message,
+          data: null,
+        });
+      }
       next(error);
     }
   }
+
+  // Update Image Profile
+  static async updateProfileImage(req, res, next) {
+    try {
+      const authHeader = req.headers.authorization;
+
+      if (authHeader) {
+        const bearerToken = authHeader.split(" ")[1];
+        const payload = decodeToken(bearerToken);
+        const email = payload.email;
+
+        const file = req.file;
+
+        if (!file) {
+          const err = new Error("File tidak ditemukan");
+          err.status = 400;
+          throw err;
+        }
+
+        const filePath = file.path;
+
+        const updateProfile = await UserModel.updateProfileImage(
+          email,
+          filePath
+        );
+
+        res.status(200).json({
+          status: 0,
+          message: "Update Profile Image berhasil",
+          data: updateProfile,
+        });
+      } else {
+        const err = new Error("Token tidak tidak valid atau kadaluwarsa");
+        err.status = 401;
+        throw err;
+      }
+    } catch (error) {
+      if (error.status === 400) {
+        return res.status(400).json({
+          status: 102,
+          message: error.message,
+          data: null,
+        });
+      }
+      if (error.status === 401) {
+        return res.status(400).json({
+          status: 102,
+          message: error.message,
+          data: null,
+        });
+      }
+      next(error);
+    }
+  }
+  static async X(req, res, next) {}
 }
 
 export default UserController;

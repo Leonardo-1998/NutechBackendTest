@@ -110,6 +110,48 @@ class UserModel {
     }
   }
 
+  // Update Profile
+  static async updateProfile(email, first_name, last_name) {
+    try {
+      let profileQuery = `
+            UPDATE users u
+            SET first_name = $2, last_name = $3
+            WHERE u.email = $1
+      `;
+
+      const values = [email, first_name, last_name];
+
+      await pool.query(profileQuery, values);
+
+      let profile = this.membershipProfile(email);
+
+      return profile;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Update Profile Image
+  static async updateProfileImage(email, profile_image) {
+    try {
+      let profileQuery = `
+            UPDATE users u
+            SET profile_image = $2
+            WHERE u.email = $1
+      `;
+
+      const values = [email, profile_image];
+
+      await pool.query(profileQuery, values);
+
+      let profile = this.membershipProfile(email);
+
+      return profile;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async X() {
     try {
     } catch (error) {

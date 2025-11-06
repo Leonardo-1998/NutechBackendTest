@@ -9,5 +9,13 @@ export const token = (payload) => {
 };
 
 export const decodeToken = (token) => {
-  return jwt.verify(token, JWT_SECRET);
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      const err = new Error("Token tidak tidak valid atau kadaluwarsa");
+      err.status = 401;
+      throw err;
+    }
+  }
 };
