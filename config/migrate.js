@@ -32,7 +32,8 @@ const migrate = async () => {
             first_name VARCHAR NOT NULL,
             last_name VARCHAR NOT NULL,
             password VARCHAR NOT NULL,
-            profile_image varchar NOT NULL
+            profile_image VARCHAR NOT NULL,
+            balance INTEGER NOT NULL
         )
     `;
 

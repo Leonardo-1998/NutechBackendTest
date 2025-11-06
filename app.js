@@ -3,6 +3,7 @@ import UserController from "./controllers/UserController.js";
 import InformationController from "./controllers/InformationController.js";
 import { upload } from "./utils/multer.js";
 import multer from "multer";
+import TransactionController from "./controllers/TransactionController.js";
 
 const app = express();
 const port = 3000;
@@ -30,10 +31,10 @@ app.get("/banner", InformationController.showAllBanner);
 app.get("/services", InformationController.showServices);
 
 // Module Transaction
-app.get("/balance", UserController.X);
-app.post("/topup", UserController.X);
-app.post("/transaction", UserController.X);
-app.get("/transaction/history", UserController.X);
+app.get("/balance", TransactionController.getBalance);
+app.post("/topup", TransactionController.addBalance);
+app.post("/transaction", TransactionController.X);
+app.get("/transaction/history", TransactionController.X);
 
 // Error Handler
 app.use((err, req, res, next) => {

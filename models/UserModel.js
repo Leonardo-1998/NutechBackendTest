@@ -8,8 +8,8 @@ class UserModel {
   static async createNewUser(email, first_name, last_name, password) {
     try {
       const profileQuery = `
-            INSERT INTO users (email, first_name , last_name, password, profile_image) 
-            VALUES ($1, $2, $3, $4, $5);
+            INSERT INTO users (email, first_name , last_name, password, profile_image, balance) 
+            VALUES ($1, $2, $3, $4, $5, $6);
         `;
 
       const hashedPassword = await hash(password);
@@ -20,6 +20,7 @@ class UserModel {
         last_name,
         hashedPassword,
         "https://picsum.photos/200",
+        0,
       ];
 
       await pool.query(profileQuery, values);
@@ -77,7 +78,6 @@ class UserModel {
       const values = [email];
 
       let { rows: profile } = await pool.query(profileQuery, values);
-      // console.log(profile);
 
       profile = profile.map((el) => {
         return new User(
