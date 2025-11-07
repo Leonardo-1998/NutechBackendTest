@@ -1,9 +1,9 @@
 import express from "express";
-import UserController from "./controllers/UserController.js";
-import InformationController from "./controllers/InformationController.js";
-import { upload } from "./utils/multer.js";
+import UserController from "../controllers/UserController.js";
+import InformationController from "../controllers/InformationController.js";
+import { upload } from "../utils/multer.js";
 import multer from "multer";
-import TransactionController from "./controllers/TransactionController.js";
+import TransactionController from "../controllers/TransactionController.js";
 
 const app = express();
 const port = 3000;
