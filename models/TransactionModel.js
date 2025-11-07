@@ -123,6 +123,21 @@ class TransactionModel {
       ];
 
       await pool.query(recordQuery, values);
+
+      // Mengurangi balance
+      const balance = await this.showBalance(email);
+      let newBalance = balance - serviceData[0].service_tariff;
+
+      const updateBalanceQuery = `
+        UPDATE users
+        SET balance = $2
+        WHERE email = $1
+      `;
+
+      const valuesService = [email, newBalance];
+
+      await pool.query(updateBalanceQuery, valuesService);
+
       const data = {
         invoice_number: invoice_number,
         service_code: serviceData[0].service_code,
