@@ -109,7 +109,6 @@ class UserController {
 
         const profile = await UserModel.membershipProfile(email);
 
-        console.log(profile);
         res.status(200).json({
           status: 0,
           message: "Suskes",

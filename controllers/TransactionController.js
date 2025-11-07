@@ -142,9 +142,6 @@ class TransactionController {
         const offset = parseInt(req.query.offset) || 0;
         const limit = req.query.limit ? parseInt(req.query.limit) : 0;
 
-        console.log(offset);
-        console.log(limit);
-
         let record = await TransactionModel.records(email, limit, offset);
         res.status(200).json({
           status: 0,
