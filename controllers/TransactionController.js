@@ -86,6 +86,48 @@ class TransactionController {
     }
   }
 
+  //   Transaction
+  static async transaction(req, res, next) {
+    try {
+      const authHeader = req.headers.authorization;
+
+      if (authHeader) {
+        const bearerToken = authHeader.split(" ")[1];
+        const payload = decodeToken(bearerToken);
+        const email = payload.email;
+
+        const { service_code } = req.body;
+
+        const data = await TransactionModel.serviceUsed(email, service_code);
+
+        res.status(200).json({
+          status: 0,
+          message: "Transaksi berhasil",
+          data: data,
+        });
+      } else {
+        const err = new Error("Token tidak tidak valid atau kadaluwarsa");
+        err.status = 401;
+        throw err;
+      }
+    } catch (error) {
+      if (error.status === 401) {
+        return res.status(401).json({
+          status: 108,
+          message: error.message,
+          data: null,
+        });
+      } else if (error.status === 400) {
+        return res.status(400).json({
+          status: 102,
+          message: error.message,
+          data: null,
+        });
+      }
+      next(error);
+    }
+  }
+
   //   Transaction History
   static async showRecord(req, res, next) {
     try {
@@ -128,11 +170,6 @@ class TransactionController {
       }
       next(error);
     }
-  }
-
-  static async X(req, res, next) {
-    try {
-    } catch (error) {}
   }
 }
 

@@ -33,7 +33,7 @@ app.get("/services", InformationController.showServices);
 // Module Transaction
 app.get("/balance", TransactionController.getBalance);
 app.post("/topup", TransactionController.addBalance);
-app.post("/transaction", TransactionController.X);
+app.post("/transaction", TransactionController.transaction);
 app.get("/transaction/history", TransactionController.showRecord);
 
 // Error Handler

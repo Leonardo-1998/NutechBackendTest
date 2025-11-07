@@ -94,16 +94,62 @@ class TransactionModel {
     }
   }
 
+  // Use Service
+  static async serviceUsed(email, service_code) {
+    try {
+      let serviceData = await this.service(service_code);
+
+      console.log(serviceData);
+
+      const recordQuery = `
+            INSERT INTO records 
+              (invoice_number,
+              transaction_type,
+              description, 
+              total_amount, 
+              created_on, 
+              email)
+            VALUES($1, $2, $3, $4, $5, $6)
+      `;
+
+      let invoice_number = "INV17082023" + 1;
+      let date = new Date();
+
+      const values = [
+        invoice_number,
+        "PAYMENT",
+        serviceData[0].service_name,
+        serviceData[0].service_tariff,
+        date,
+        email,
+      ];
+
+      await pool.query(recordQuery, values);
+      const data = {
+        invoice_number: invoice_number,
+        service_code: serviceData[0].service_code,
+        service_name: serviceData[0].service_name,
+        transaction_type: "PAYMENT",
+        total_amount: serviceData[0].service_tariff,
+        created_on: date,
+      };
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Services by type
-  static async service(transaction_type) {
+  static async service(service_code) {
     try {
       const servicesQuery = `
             SELECT *
             FROM services
-            WHERE $1
+            WHERE service_code = $1
       `;
 
-      const valuesTransaction = [transaction_type];
+      const valuesTransaction = [service_code];
 
       let { rows: services } = await pool.query(
         servicesQuery,
