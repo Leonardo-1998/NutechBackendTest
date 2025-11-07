@@ -34,7 +34,7 @@ app.get("/services", InformationController.showServices);
 app.get("/balance", TransactionController.getBalance);
 app.post("/topup", TransactionController.addBalance);
 app.post("/transaction", TransactionController.X);
-app.get("/transaction/history", TransactionController.X);
+app.get("/transaction/history", TransactionController.showRecord);
 
 // Error Handler
 app.use((err, req, res, next) => {

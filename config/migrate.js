@@ -90,7 +90,8 @@ const migrate = async () => {
             transaction_type VARCHAR,
             description VARCHAR,
             total_amount INTEGER,
-            created_on DATE
+            created_on DATE,
+            user_id VARCHAR
         )
     `;
 
