@@ -8,7 +8,8 @@
     "ex": "npx nodemon app.js",
     "m": "node ./config/migrate.js",
     "s": "node ./config/seed.js",
-    "ms": "node ./config/migrate.js && node ./config/seed.js"
+    "ms": "node ./config/migrate.js && node ./config/seed.js",
+    "start": "node ./app/index.js"
   },
   "keywords": [],
   "author": "",
