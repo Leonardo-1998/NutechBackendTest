@@ -11,10 +11,6 @@ const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 // Module Membership
 app.post("/registration", UserController.registerUser);
 app.post("/login", UserController.loginUser);

@@ -238,11 +238,6 @@ class UserController {
       next(error);
     }
   }
-
-  static async X(req, res, next) {
-    try {
-    } catch (error) {}
-  }
 }
 
 export default UserController;

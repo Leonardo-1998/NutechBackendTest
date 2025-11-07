@@ -99,8 +99,6 @@ class TransactionModel {
     try {
       let serviceData = await this.service(service_code);
 
-      console.log(serviceData);
-
       const recordQuery = `
             INSERT INTO records 
               (invoice_number,
