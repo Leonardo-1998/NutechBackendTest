@@ -6,7 +6,7 @@ import multer from "multer";
 import TransactionController from "../controllers/TransactionController.js";
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -48,6 +48,6 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(`Starting app at port ${port}`);
 });
